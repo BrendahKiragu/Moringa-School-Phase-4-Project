@@ -12,15 +12,13 @@
 9. [License](#license)
 
 ## Overview
-The Book Swap Hub App is a full-stack web application that allows users to buy, sell, rent, and review books. It includes functionality for user authentication, book listings, leaving book reviews, and transaction management. The front end is built using React and styled with Bootstrap for a responsive design, while the backend is powered by Flask, handling API requests, database interactions, and authentication.
+The Book Swap Hub App is a full-stack web application that allows users to buy, rent, and review books. It includes functionality for user authentication, book listings, leaving book reviews, and transaction management. The front end is built using React and styled with Bootstrap for a responsive design, while the backend is powered by Flask, handling API requests, database interactions, and authentication.
 
-Users can sign up either as vendors or customers. vendors can list books for sale or rent, and customers can browse books, make purchases, and leave reviews.
+A user signs up as a customer and can browse the existing catalogue of books, make purchases or rent books, and leave reviews.
 
 ## Features
-- **User Roles**: Two roles - vendors (who can list books) and customers (who can buy or rent books).
 - **Authentication**: User authentication using hashed passwords and JWT.
-- **Book Listings**: vendors can add books with details like title, author, price, and condition.
-- **Transactions**: Customers can buy or rent books, and the status of books (available, rented, sold) is updated accordingly.
+- **Transactions**: Users can buy or rent books, and the status of books (available, rented, sold) is updated accordingly.
 - **Book Reviews**: Users can leave reviews and ratings (1-5) for books they’ve purchased or rented.
 - **Responsive Design**: Bootstrap is used for styling, making the app mobile-friendly.
 
@@ -28,15 +26,22 @@ Users can sign up either as vendors or customers. vendors can list books for sal
 - **Frontend**: React, Bootstrap
 - **Backend**: Flask, SQLAlchemy
 - **Database**: SQLite (development) / PostgreSQL (production)
-- **Authentication**: Flask-Bcrypt for password hashing, JWT for secure user authentication.
+- **Authentication**: Flask-Bcrypt for password hashing.
 
 ## Installation Guidelines
+
+### Prerequisites
+1. **Python:** Ensure you have Python installed (version 3.6 or higher).
+2. **Flask:** You need to have Flask installed. If you haven't done so, you can install it using pip:
+  ```bash
+  pip install flask
+  ```
 
 ### Backend Setup (Flask)
 1. **Clone the repository**:
 Visit the repo, click the green `Code` button, and copy the `SSH` key. Then clone it to your local machine.
     ```bash
-    git clone git@github.com:silvanos-eric/Book-Swap-Hub.git
+    git clone git@github.com:BrendahKiragu/Book-Swap-Hub.git
     cd Book-Swap-Hub
     ```
 
@@ -56,8 +61,13 @@ Visit the repo, click the green `Code` button, and copy the `SSH` key. Then clon
     cd server/ #change to the server directory
     python seed.py
     ```
-
-6. **Run the Flask server**:
+5. **Set Environment Variables:** Before running the application, you need to set the following environment variables.
+- open your terminal and run these commands:
+    ```bash
+    export FLASK_APP=app.py
+    export FLASK_RUN_PORT=5555
+    ```
+6. **Run the Flask server**: Start the Flask server by executing:
     ```bash
     flask run
     ````
@@ -78,7 +88,7 @@ Visit the repo, click the green `Code` button, and copy the `SSH` key. Then clon
     npm run dev
     ```
 
-The React app will run on `http://localhost:4000`, and the Flask API will run on `http://localhost:5555`.
+The React app will run on `http://localhost:4000`, and the Flask API will run on `http://localhost:5000`.
 
 ## Usage
 1. Sign up as a new user (either vendor or customer).
@@ -99,9 +109,6 @@ Here are the key API endpoints available in the app:
   
 - **Books**
   - `GET /api/books`: Get a list of all books.
-  - `POST /api/books`: Add a new book (vendors only).
-  - `PATCH /api/books/:id`: Edit a book's details (vendors only).
-  - `DELETE /api/books/:id`: Delete a book (vendors only).
 
 - **Transactions**
   - `POST /api/transactions`: Create a new transaction (buy/rent a book).
@@ -112,11 +119,10 @@ Here are the key API endpoints available in the app:
   - `GET /api/reviews/:book_id`: Get reviews for a specific book.
 
 ## Database Models
-- **User**: Stores information about users, including their roles (vendor or customer).
+- **User**: Stores information about users, such as username, email and password.
 - **Book**: Stores book information, including title, author, price, condition, and status (available, sold, or rented).
 - **Transaction**: Represents transactions, such as book purchases or rentals.
-- **Review**: Stores user reviews and ratings for books.
-- **Role**: Defines user roles in the system (vendor or customer).
+- **Review**: Stores user reviews, date of posting a review and ratings for books.
 
 ## Deployment
 
