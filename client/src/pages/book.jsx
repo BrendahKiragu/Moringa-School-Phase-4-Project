@@ -1,7 +1,5 @@
 import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { useBookById, useCreateTransaction } from "../hooks";
 import {
   Container,
   Row,
@@ -9,7 +7,9 @@ import {
   ListGroup,
   ButtonGroup,
   Button,
+  Form,
 } from "../components";
+import { useBookById, useCreateTransaction } from "../hooks";
 import { UserContext } from "../contexts";
 import { showErrorToast, showSuccessToast } from "../utils";
 
@@ -18,8 +18,29 @@ const Book = () => {
   const navigate = useNavigate();
   const { book, setBook, loading, error } = useBookById(bookId);
   const { user } = useContext(UserContext);
-  const { createTransaction, isLoading: transctionLoading } =
+  const { createTransaction, isLoading: transactionLoading } =
     useCreateTransaction();
+
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(5); // State to hold rating input
+  const [reviews, setReviews] = useState([]); // State to store reviews
+
+  // Fetch reviews from the backend
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(`/api/reviews?book_id=${bookId}`);
+        const data = await response.json();
+        setReviews(data); // Set reviews data
+      } catch (err) {
+        showErrorToast("Failed to fetch reviews");
+      }
+    };
+
+    if (bookId) {
+      fetchReviews();
+    }
+  }, [bookId]);
 
   const handleBuyClick = async () => {
     if (!user) {
@@ -55,7 +76,44 @@ const Book = () => {
     }
   };
 
-  useEffect(() => {}, [bookId]);
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!user) {
+      return navigate("/login");
+    }
+
+    const newReview = {
+      rating: rating,
+      comment: reviewText,
+      user_id: user.id,
+      book_id: bookId,
+    };
+
+    try {
+      const response = await fetch("/api/reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newReview),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit review");
+      }
+
+      const savedReview = await response.json();
+      setReviews([...reviews, savedReview]);
+
+      setReviewText(""); // Clears input fields
+      setRating(5); // Resets rating to a default of 5
+      showSuccessToast("Review submitted successfully");
+    } catch (err) {
+      console.error(err); // Log error to console for more info
+      showErrorToast(err.message);
+    }
+  };
 
   return (
     <Container as="main" className="py-5" style={{ maxWidth: 600 }}>
@@ -91,18 +149,18 @@ const Book = () => {
               <ListGroup.Item>Condition: {book.condition}</ListGroup.Item>
             </ListGroup>
           </Row>
-          {book.status == "available" && (
+          {book.status === "available" && (
             <Row as="section" className="mt-4">
               <ButtonGroup aria-label="Basic example">
                 <Button
-                  disabled={transctionLoading}
+                  disabled={transactionLoading}
                   onClick={handleBuyClick}
                   variant="success"
                 >
                   Buy
                 </Button>
                 <Button
-                  disabled={transctionLoading}
+                  disabled={transactionLoading}
                   onClick={handleRentClick}
                   variant="secondary"
                 >
@@ -111,11 +169,81 @@ const Book = () => {
               </ButtonGroup>
             </Row>
           )}
-          {book.status == "rented" && (
+          {book.status === "rented" && (
             <p className="lead fst-italic">
-              Book is currently rented. Be on the look out for when it is next
+              Book is currently rented. Be on the lookout for when it is next
               available.
             </p>
+          )}
+
+          {/* Review Section */}
+          <Row as="section" className="mt-4">
+            <h2>Reviews</h2>
+            <ListGroup>
+              {reviews.length === 0 ? (
+                <ListGroup.Item>No reviews yet</ListGroup.Item>
+              ) : (
+                reviews.map((review, index) => (
+                  <ListGroup.Item key={index}>
+                    <p className="mb-1">
+                      <strong>
+                        {review.user
+                          ? review.user.username
+                          : `User ${review.user_id}`}
+                      </strong>{" "}
+                      <small>
+                        (
+                        {review.date
+                          ? new Date(review.date).toLocaleString()
+                          : "No date available"}
+                        )
+                      </small>
+                    </p>
+                    <p>Rating: {review.rating}/5</p>
+                    <p>{review.comment}</p>
+                  </ListGroup.Item>
+                ))
+              )}
+            </ListGroup>
+          </Row>
+
+          {/* Review Form */}
+          {user && (
+            <Row as="section" className="mt-4">
+              <h2>Leave a Review</h2>
+              <Form onSubmit={handleReviewSubmit}>
+                <Form.Group controlId="rating">
+                  <Form.Label>Rating</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                    required
+                  >
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                  </Form.Control>
+                </Form.Group>
+
+                <Form.Group controlId="reviewText">
+                  <Form.Label>Comment</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={reviewText}
+                    onChange={(e) => setReviewText(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Button className="mt-2" type="submit" variant="primary">
+                  Submit Review
+                </Button>
+              </Form>
+            </Row>
           )}
         </>
       )}
