@@ -17,10 +17,16 @@ The Book Swap Hub App is a full-stack web application that allows users to buy, 
 A user signs up as a customer and can browse the existing catalogue of books, make purchases or rent books, and leave reviews.
 
 ## Features
-- **Authentication**: User authentication using hashed passwords and JWT.
-- **Transactions**: Users can buy or rent books, and the status of books (available, rented, sold) is updated accordingly.
-- **Book Reviews**: Users can leave reviews and ratings (1-5) for books they’ve purchased or rented.
+- **Authentication**: As an existing user during sign-up your password is authenticated using bcrypt_check_hashed passwords.
+- **Transactions**: As a user you can buy or rent books, and the status of books (available, rented, sold) is updated accordingly.
+- **Book Reviews**: As a user you can leave reviews and ratings (1-5) for books they’ve purchased or rented.
 - **Responsive Design**: Bootstrap is used for styling, making the app mobile-friendly.
+ 
+## Front-End routes/Navigation Links
+**Home:** Navigates users to the landing page, providing an overview of the Book Swap Hub and its key features.
+**Signup:** Directs new users to the registration page where they can create an account to access the app's functionalities.
+**Login:** Takes users to the login page, allowing them to enter their credentials to access their accounts.
+**Catalogue:** Leads users to the main book listing page, where they can browse, buy, or rent available books and leave reviews.
 
 ## Tech Stack
 - **Frontend**: React, Bootstrap
@@ -91,11 +97,7 @@ Visit the repo, click the green `Code` button, and copy the `SSH` key. Then clon
 The React app will run on `http://localhost:4000`, and the Flask API will run on `http://localhost:5000`.
 
 ## Usage
-1. Sign up as a new user (either vendor or customer).
-2. As a vendor, you can:
-   - Add new books for sale or rent.
-   - View and manage your listed books.
-3. As a customer, you can:
+1. Sign up as a new user to access the following features:
    - Browse available books.
    - Buy or rent books.
    - Leave reviews and ratings on purchased or rented books.
@@ -105,7 +107,7 @@ Here are the key API endpoints available in the app:
 
 - **User Authentication**
   - `POST /api/signup`: Register a new user.
-  - `POST /api/login`: Log in a user.
+  - `POST /api/login`: Log in an existing user.
   
 - **Books**
   - `GET /api/books`: Get a list of all books.
