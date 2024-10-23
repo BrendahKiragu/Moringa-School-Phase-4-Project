@@ -1,4 +1,4 @@
-from flask import request, session
+from flask import request, session, jsonify
 from flask_restful import Resource
 from models import Book, Review, Role, Transaction, User, db
 from sqlalchemy.exc import IntegrityError
@@ -195,9 +195,24 @@ class Reviews(Resource):
     def get(self):
         review_list = Review.query.all()
 
-        review_dict_list = [review.to_dict() for review in review_list]
+        # Create a list of review dictionaries
+        review_dict_list = [
+            {
+                'id': r.id,
+                'rating': r.rating,
+                'comment': r.comment,
+                'date': r.date,
+                'user_id': r.user_id,
+                'book_id': r.book_id,
+                'user': {
+                    'username': r.user.username if r.user else 'Anonymous'
+                }
+            }
+            for r in review_list
+        ]
 
-        return review_dict_list
+        return jsonify(review_dict_list)
+
 
 class ReviewByID(Resource):
 
