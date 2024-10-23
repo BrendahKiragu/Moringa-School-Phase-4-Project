@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Container,
@@ -187,9 +187,10 @@ const Book = () => {
                   <ListGroup.Item key={index}>
                     <p className="mb-1">
                       <strong>
-                        {review.user
+                        Reviewed by:
+                        {review.user && review.user.username
                           ? review.user.username
-                          : `User ${review.user_id}`}
+                          : `User ${review.user_id || "Anonymous"}`}
                       </strong>{" "}
                       <small>
                         (
@@ -199,8 +200,12 @@ const Book = () => {
                         )
                       </small>
                     </p>
-                    <p>Rating: {review.rating}/5</p>
-                    <p>{review.comment}</p>
+                    <p>
+                      <strong>Rating:</strong> {review.rating}/5
+                    </p>
+                    <p>
+                      <strong>Comment:</strong> {review.comment}
+                    </p>
                   </ListGroup.Item>
                 ))
               )}
@@ -213,7 +218,7 @@ const Book = () => {
               <h2>Leave a Review</h2>
               <Form onSubmit={handleReviewSubmit}>
                 <Form.Group controlId="rating">
-                  <Form.Label>Rating</Form.Label>
+                  <Form.Label>Select a Rating Below</Form.Label>
                   <Form.Control
                     as="select"
                     value={rating}
@@ -236,6 +241,7 @@ const Book = () => {
                     value={reviewText}
                     onChange={(e) => setReviewText(e.target.value)}
                     required
+                    placeholder="Write your comment here"
                   />
                 </Form.Group>
 
