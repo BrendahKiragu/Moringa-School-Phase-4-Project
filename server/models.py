@@ -245,6 +245,7 @@ class Review(db.Model, SerializerMixin):
                    primary_key=True)  # Auto-incrementing ID for each review
     rating = db.Column(db.Integer, nullable=False)  # Rating between 1 and 5
     comment = db.Column(db.Text, nullable=True)  # Optional review comment
+    date = db.Column(db.DateTime, default=func.now()) #sets time for review posting as now
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('users.id', ondelete='CASCADE'),
