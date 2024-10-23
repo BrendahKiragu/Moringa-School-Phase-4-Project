@@ -119,7 +119,8 @@ def seed():
                 rating=rating,
                 comment=comment,
                 user_id=customer.id,  # Explicitly assign user_id
-                book_id=transaction.book.id  # Explicitly assign book_id
+                book_id=transaction.book.id,  # Explicitly assign book_id
+                date=datetime.now()
             )
             db.session.add(new_review)
 
