@@ -3,13 +3,14 @@
 ## Table of Contents
 1. [Overview](#overview)
 2. [Features](#features)
-3. [Tech Stack](#tech-stack)
-4. [Installation Guidelines](#installation-guidelines)
-5. [Usage](#usage)
-6. [API Endpoints](#api-endpoints)
-7. [Database Models](#database-models)
-8. [Deployment](#deployment)
-9. [License](#license)
+3. [Front-End routes](#front-end-routes)
+4. [Tech Stack](#tech-stack)
+5. [Installation Guidelines](#installation-guidelines)
+6. [Usage](#usage)
+7. [API Endpoints](#api-endpoints)
+8. [Database Models](#database-models)
+9. [Deployment](#deployment)
+10. [License](#license)
 
 ## Overview
 The Book Swap Hub App is a full-stack web application that allows users to buy, rent, and review books. It includes functionality for user authentication, book listings, leaving book reviews, and transaction management. The front end is built using React and styled with Bootstrap for a responsive design, while the backend is powered by Flask, handling API requests, database interactions, and authentication.
@@ -22,11 +23,11 @@ A user signs up as a customer and can browse the existing catalogue of books, ma
 - **Book Reviews**: As a user you can leave reviews and ratings (1-5) for books they’ve purchased or rented.
 - **Responsive Design**: Bootstrap is used for styling, making the app mobile-friendly.
  
-## Front-End routes/Navigation Links
-**Home:** Navigates users to the landing page, providing an overview of the Book Swap Hub and its key features.
-**Signup:** Directs new users to the registration page where they can create an account to access the app's functionalities.
-**Login:** Takes users to the login page, allowing them to enter their credentials to access their accounts.
-**Catalogue:** Leads users to the main book listing page, where they can browse, buy, or rent available books and leave reviews.
+## Front-End routes
+- **Home:** Navigates users to the landing page, providing an overview of the Book Swap Hub and its key features.
+- **Signup:** Directs new users to the registration page where they can create an account to access the app's functionalities.
+- **Login:** Takes users to the login page, allowing them to enter their credentials to access their accounts.
+- **Catalogue:** Leads users to the main book listing page, where they can browse, buy, or rent available books and leave reviews.
 
 ## Tech Stack
 - **Frontend**: React, Bootstrap
