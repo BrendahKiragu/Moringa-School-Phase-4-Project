@@ -159,6 +159,38 @@ class BookByID(Resource):
 
 
 class Reviews(Resource):
+    def post(self):
+        try:
+            user_id = validate_login()  # Ensure this returns a valid user ID
+            data = request.json
+
+            # Log the incoming data to verify it
+            print(f"Incoming review data: {data}")
+
+            rating = data['rating']
+            comment = data.get('comment')
+            book_id = data['book_id']
+
+            # Log user and book information for debugging
+            print(f"User ID: {user_id}, Book ID: {book_id}")
+
+            # Ensure the rating and book_id are valid
+            new_review = Review(
+                rating=rating,
+                comment=comment,
+                user_id=user_id,
+                book_id=book_id
+            )
+
+            db.session.add(new_review)
+            db.session.commit()
+
+            return new_review.to_dict(), 201
+        except Exception as e:
+            print(f"Error: {e}")
+            errors = handleException(e)
+            return errors
+
 
     def get(self):
         review_list = Review.query.all()
@@ -166,29 +198,6 @@ class Reviews(Resource):
         review_dict_list = [review.to_dict() for review in review_list]
 
         return review_dict_list
-
-    def post(self):
-        try:
-            user_id = validate_login()
-            data = request.json
-
-            rating = data['rating']
-            comment = data.get('comment')
-            book_id = data['book_id']
-
-            new_review = Review(rating=rating,
-                                comment=comment,
-                                user_id=user_id,
-                                book_id=book_id)
-
-            db.session.add(new_review)
-            db.session.commit()
-
-            return new_review.to_dict(), 201
-        except Exception as e:
-            errors = handleException(e)
-            return errors
-
 
 class ReviewByID(Resource):
 
